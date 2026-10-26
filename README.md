@@ -1,43 +1,43 @@
-# Sam Ratulangi Airport Portal
+# Portal Bandara Sam Ratulangi
 
-A passenger information prototype and an internal airport-operations pilot for Sam Ratulangi International Airport (MDC), Manado.
+Prototipe informasi penumpang dan pilot internal operasional bandara untuk Bandar Udara Internasional Sam Ratulangi (MDC), Manado.
 
-> **Data boundary:** The passenger flight board uses simulated data. The admin dashboard uses manually entered pilot data in a local SQLite database. Neither is connected to a live airport or airline feed, and admin data is not published to the passenger site.
+> **Batasan data:** Papan penerbangan penumpang menggunakan data simulasi. Dashboard admin menggunakan data pilot yang dimasukkan secara manual dan disimpan di basis data SQLite lokal. Keduanya tidak terhubung ke feed langsung bandara atau maskapai, dan data admin tidak diterbitkan ke situs penumpang.
 
-## What’s included
+## Fitur
 
-### Passenger site (`/`)
+### Situs penumpang (`/`)
 
-- Searchable sample departures and arrivals, with simulated status changes.
-- An interactive airport map, parking and transport information, and service guides.
-- English and Indonesian content, plus an offline rule-based airport assistant.
+- Contoh jadwal keberangkatan dan kedatangan yang dapat dicari, dengan perubahan status simulasi.
+- Peta bandara interaktif, informasi parkir dan transportasi, serta panduan layanan.
+- Konten berbahasa Indonesia dan Inggris, serta asisten bandara luring berbasis aturan.
 
-### Admin dashboard (`/admin`)
+### Dashboard admin (`/admin`)
 
-- Three work areas: Overview, Flight monitor, and Event log.
-- Gate-conflict detection, gate occupancy, priority flights, and movement summaries.
-- Manual flight creation and editing, status actions, delay and cancellation actions, and gate reassignment.
-- Audited, version-checked writes and a shared event read state for the pilot desk.
-- English and Indonesian UI, with saved language and theme preferences.
+- Tiga area kerja: Ringkasan, Monitor Penerbangan, dan Log Aktivitas.
+- Deteksi konflik gate, status penggunaan gate, antrean prioritas, dan ringkasan pergerakan.
+- Pembuatan dan penyuntingan data penerbangan secara manual, tindakan status, penundaan dan pembatalan, serta pemindahan gate.
+- Setiap perubahan dicatat dalam audit dan menggunakan pemeriksaan versi; status baca log aktivitas digunakan bersama oleh petugas pilot.
+- Antarmuka berbahasa Indonesia dan Inggris, dengan preferensi bahasa dan tema yang tersimpan.
 
-The admin interface is for local pilot validation. It does not authorize operational use or connect to live airport systems.
+Dashboard admin ditujukan untuk validasi pilot lokal dan belum untuk penggunaan operasional. Dashboard ini tidak terhubung ke sistem bandara langsung.
 
-## Technology
+## Teknologi
 
-- React 19, TypeScript 5.9, and Vite 7.
-- Tailwind CSS 3.4, scoped dashboard styles, and Lucide icons.
-- React Router 7 and Radix UI components.
-- Node.js 24+ for the local HTTP API and built-in SQLite support.
-- Node.js native test runner (`node --test`).
+- React 19, TypeScript 5.9, dan Vite 7.
+- Tailwind CSS 3.4, CSS khusus dashboard, dan ikon Lucide.
+- React Router 7 dan komponen Radix UI.
+- Node.js 24+ untuk API HTTP lokal dan dukungan SQLite bawaan.
+- Runner pengujian bawaan Node.js (`node --test`).
 
-## Run locally
+## Menjalankan secara lokal
 
-### Requirements
+### Persyaratan
 
-- Node.js 24 or newer
-- npm 10 or newer
+- Node.js versi 24 atau lebih baru
+- npm versi 10 atau lebih baru
 
-### Install and start
+### Instalasi dan menjalankan
 
 ```bash
 git clone https://github.com/putrapratama771929-lgtm/airport-sam-ratulangi.git
@@ -46,61 +46,61 @@ npm install
 npm run dev
 ```
 
-Open [http://127.0.0.1:3000](http://127.0.0.1:3000). The development command starts the Vite site and the local pilot API. The API binds to `127.0.0.1:3001` by default, and the SQLite database is created at `./var/airport-pilot.sqlite`.
+Buka [http://127.0.0.1:3000](http://127.0.0.1:3000). Perintah pengembangan menjalankan situs Vite dan API pilot lokal. Secara default, API berjalan di `127.0.0.1:3001`, dan basis data SQLite dibuat di `./var/airport-pilot.sqlite`.
 
-The pilot database starts without flights. To load the synthetic demonstration flights, notices, and audit entries, run this once in a second terminal:
+Basis data pilot dimulai tanpa data penerbangan. Untuk mengisi contoh penerbangan, pemberitahuan, dan entri audit sintetis, jalankan perintah berikut satu kali di terminal kedua:
 
 ```bash
 npm run pilot:seed-demo
 ```
 
-The seed command refuses to mix demo records into a database that already contains flights. Seeded records are synthetic and should not be treated as live operations data.
+Seeder menolak mencampurkan data demo ke basis data yang sudah berisi penerbangan. Data yang dibuat bersifat sintetis dan tidak boleh dianggap sebagai data operasional langsung.
 
-### Create a pilot operator
+### Membuat akun operator pilot
 
-There is no default account or public sign-up. Create the first operator locally:
+Tidak ada akun bawaan atau pendaftaran publik. Buat akun operator pertama secara lokal:
 
-1. Copy `.env.example` to `.env`.
-2. Set `PILOT_ADMIN_EMAIL` and `PILOT_ADMIN_PASSWORD` to the operator credentials. Use a unique password with at least 12 characters.
-3. Run `npm run pilot:create-operator`.
-4. Remove `PILOT_ADMIN_PASSWORD` from `.env` after provisioning.
-5. Sign in at `/login`.
+1. Salin `.env.example` menjadi `.env`.
+2. Isi `PILOT_ADMIN_EMAIL` dan `PILOT_ADMIN_PASSWORD` dengan kredensial operator. Gunakan kata sandi unik minimal 12 karakter.
+3. Jalankan `npm run pilot:create-operator`.
+4. Hapus `PILOT_ADMIN_PASSWORD` dari `.env` setelah pembuatan akun.
+5. Masuk melalui `/login`.
 
-Keep `.env` private; it is ignored by Git. Provision accounts out of band.
+Jaga kerahasiaan `.env`; file tersebut diabaikan oleh Git. Buat akun operator melalui proses terpisah dan terkendali.
 
-## Configuration
+## Konfigurasi
 
-The development defaults are listed in `.env.example`:
+Nilai bawaan untuk pengembangan tercantum di `.env.example`:
 
-| Variable | Purpose | Default |
+| Variabel | Fungsi | Nilai bawaan |
 | --- | --- | --- |
-| `PILOT_DB_PATH` | SQLite database file | `./var/airport-pilot.sqlite` |
-| `PILOT_HOST` | API/server bind address | `127.0.0.1` |
-| `PILOT_API_PORT` | Pilot API port | `3001` |
-| `VITE_PORT` | Vite development server port | `3000` |
+| `PILOT_DB_PATH` | Lokasi berkas basis data SQLite | `./var/airport-pilot.sqlite` |
+| `PILOT_HOST` | Alamat bind API/server | `127.0.0.1` |
+| `PILOT_API_PORT` | Port API pilot | `3001` |
+| `VITE_PORT` | Port server pengembangan Vite | `3000` |
 
-Production also requires one exact HTTPS origin in `PILOT_APP_ORIGIN` and persistent database storage. Terminate TLS at the approved host or reverse proxy. The app does not configure production infrastructure or backups for you.
+Lingkungan produksi juga memerlukan satu origin HTTPS yang tepat di `PILOT_APP_ORIGIN` dan penyimpanan basis data persisten. Akhiri TLS pada server atau reverse proxy yang disetujui. Aplikasi ini tidak menyiapkan infrastruktur produksi atau pencadangan secara otomatis.
 
-## Commands
+## Perintah
 
-| Command | Purpose |
+| Perintah | Fungsi |
 | --- | --- |
-| `npm run dev` | Start the local site and pilot API |
-| `npm run build` | Type-check and create a production build in `dist/` |
-| `npm run preview` | Preview the Vite production build locally |
-| `npm start` | Serve the production build and API |
-| `npm run pilot:seed-demo` | Add the synthetic pilot dataset to an empty flight database |
-| `npm run pilot:create-operator` | Provision an operator from temporary environment variables |
-| `npm test` | Run domain and pilot API tests |
-| `npm run lint` | Run ESLint |
+| `npm run dev` | Menjalankan situs lokal dan API pilot |
+| `npm run build` | Memeriksa tipe dan membuat build produksi di `dist/` |
+| `npm run preview` | Meninjau build produksi Vite secara lokal |
+| `npm start` | Menyajikan build produksi dan API |
+| `npm run pilot:seed-demo` | Mengisi dataset pilot sintetis ke basis data penerbangan yang kosong |
+| `npm run pilot:create-operator` | Membuat akun operator dari variabel lingkungan sementara |
+| `npm test` | Menjalankan pengujian domain dan API pilot |
+| `npm run lint` | Menjalankan ESLint |
 
-## Operational and deployment boundaries
+## Batasan operasional dan deployment
 
-- All pilot times are displayed in WITA (`Asia/Makassar`, UTC+8).
-- Flight data is manually entered and stored locally; there is no live feed integration.
-- Dashboard notices remain internal and are not sent to the passenger site.
-- Production use requires airport-owner approval, an approved host and access policy, HTTPS, persistent storage, and a rehearsed backup/restore procedure.
+- Semua waktu pilot ditampilkan dalam WITA (`Asia/Makassar`, UTC+8).
+- Data penerbangan dimasukkan secara manual dan disimpan secara lokal; tidak ada integrasi feed langsung.
+- Pemberitahuan dashboard bersifat internal dan tidak dikirim ke situs penumpang.
+- Penggunaan produksi memerlukan persetujuan pemilik operasional bandara, host dan kebijakan akses yang disetujui, HTTPS, penyimpanan persisten, serta prosedur pencadangan dan pemulihan yang telah dilatih.
 
-## License
+## Lisensi
 
-This project is for demonstration and internal pilot validation.
+Proyek ini ditujukan untuk demonstrasi dan validasi pilot internal.
