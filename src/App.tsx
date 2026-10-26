@@ -3,10 +3,34 @@ import { Routes, Route } from 'react-router'
 import { Toaster } from 'sonner'
 import { RequireAdmin } from './components/RequireAdmin'
 import { FlightsProvider } from './state/flights'
+import { AdminFlightsProvider } from './state/admin-flights'
+import { AdminLanguageProvider } from './state/admin-language'
+import { useAdminLanguage } from './state/use-admin-language'
 
 const Home = lazy(() => import('./pages/Home'))
 const Login = lazy(() => import('./pages/Login'))
 const AdminDashboard = lazy(() => import('./pages/AdminDashboard'))
+
+function AdminPilotRoute() {
+  return (
+    <AdminLanguageProvider>
+      <RequireAdmin>
+        <AdminFlightsProvider>
+          <Suspense fallback={<AdminPageLoader />}><AdminDashboard /></Suspense>
+        </AdminFlightsProvider>
+      </RequireAdmin>
+    </AdminLanguageProvider>
+  )
+}
+
+function AdminPageLoader() {
+  const { t } = useAdminLanguage()
+  return <div className="flex min-h-screen items-center justify-center bg-slate-50 text-sm text-slate-600">{t.page.loading}</div>
+}
+
+function PublicHomeRoute() {
+  return <FlightsProvider><Home /></FlightsProvider>
+}
 
 function PageLoader() {
   return (
@@ -20,12 +44,12 @@ function PageLoader() {
 
 export default function App() {
   return (
-    <FlightsProvider>
+    <>
       <Suspense fallback={<PageLoader />}>
         <Routes>
-          <Route path="/" element={<Home />} />
+          <Route path="/" element={<PublicHomeRoute />} />
           <Route path="/login" element={<Login />} />
-          <Route path="/admin" element={<RequireAdmin><AdminDashboard /></RequireAdmin>} />
+          <Route path="/admin" element={<AdminPilotRoute />} />
         </Routes>
       </Suspense>
       <Toaster
@@ -42,6 +66,6 @@ export default function App() {
           },
         }}
       />
-    </FlightsProvider>
+    </>
   )
 }

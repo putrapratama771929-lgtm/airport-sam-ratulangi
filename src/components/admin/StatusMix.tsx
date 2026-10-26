@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import type { Flight, FlightStatus } from '@/data/airport'
 import { STATUS_COLOR } from '@/lib/ops-stats'
 import { Panel } from './Panel'
+import { useAdminLanguage } from '@/state/use-admin-language'
 
 const ORDER: FlightStatus[] = ['SCHEDULED', 'CHECK-IN', 'BOARDING', 'FINAL CALL', 'DELAYED', 'DEPARTED', 'LANDED', 'CANCELLED']
 const R = 38
@@ -9,6 +10,7 @@ const C = 2 * Math.PI * R
 
 /** Donut of how many flights are in each status right now. */
 export function StatusMix({ flights }: { flights: Flight[] }) {
+  const { t } = useAdminLanguage()
   const parts = useMemo(() => {
     const counts = ORDER.map((status) => ({ status, n: flights.filter((f) => f.status === status).length })).filter((p) => p.n > 0)
     const total = counts.reduce((sum, p) => sum + p.n, 0)
@@ -28,13 +30,13 @@ export function StatusMix({ flights }: { flights: Flight[] }) {
   }, [flights])
 
   return (
-    <Panel eyebrow="Status mix / 05" title="Flights by status" right={<span className="ops-count">[{parts.total}]</span>}>
+    <Panel eyebrow={t.statusMix.eyebrow} title={t.statusMix.title} right={<span className="ops-count">[{parts.total}]</span>}>
       <div className="ops-body flex items-center gap-5">
-        <svg viewBox="0 0 100 100" className="h-32 w-32 flex-none -rotate-90" role="img" aria-label={`${parts.total} flights by status`}>
+        <svg viewBox="0 0 100 100" className="h-32 w-32 flex-none -rotate-90" role="img" aria-label={t.statusMix.chartLabel(parts.total)}>
           <circle cx="50" cy="50" r={R} fill="none" stroke="var(--ops-seg-off)" strokeWidth="11" />
           {parts.rows.map((p) => (
             <circle key={p.status} cx="50" cy="50" r={R} fill="none" stroke={STATUS_COLOR[p.status]} strokeWidth="11" strokeDasharray={`${p.len} ${C - p.len}`} strokeDashoffset={-p.offset}>
-              <title>{`${p.status}: ${p.n}`}</title>
+              <title>{`${t.status[p.status]}: ${p.n}`}</title>
             </circle>
           ))}
           <text x="50" y="50" textAnchor="middle" dominantBaseline="central" className="rotate-90" style={{ transformOrigin: '50px 50px', fontSize: 20, fontWeight: 700, fill: 'var(--ops-text)' }}>{parts.total}</text>
@@ -43,12 +45,12 @@ export function StatusMix({ flights }: { flights: Flight[] }) {
           {parts.rows.map((p) => (
             <li key={p.status} className="flex items-center gap-2">
               <span className="h-2 w-2 flex-none" style={{ background: STATUS_COLOR[p.status] }} />
-              <span className="truncate text-[var(--ops-muted)]">{p.status}</span>
+              <span className="truncate text-[var(--ops-muted)]">{t.status[p.status]}</span>
               <span className="ml-auto font-bold tabular-nums">{p.n}</span>
               <span className="w-9 text-right text-[var(--ops-faint)] tabular-nums">{p.pct}%</span>
             </li>
           ))}
-          {parts.rows.length === 0 && <li className="text-[var(--ops-muted)]">No flights in this view.</li>}
+          {parts.rows.length === 0 && <li className="text-[var(--ops-muted)]">{t.statusMix.empty}</li>}
         </ul>
       </div>
     </Panel>

@@ -3,12 +3,18 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "engines": {
+    "node": ">=24.0.0"
+  },
   "scripts": {
-    "dev": "vite",
+    "dev": "node --env-file-if-exists=.env scripts/dev.mjs",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "node --test test/*.test.mjs",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "start": "node server/index.mjs",
+    "pilot:seed-demo": "node --env-file-if-exists=.env scripts/seed-pilot-demo.mjs",
+    "pilot:create-operator": "node --env-file-if-exists=.env scripts/create-pilot-operator.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

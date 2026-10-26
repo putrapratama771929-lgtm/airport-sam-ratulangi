@@ -10,13 +10,19 @@ export default function Login() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [submitting, setSubmitting] = useState(false)
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const message = login(email, password)
-    if (message) return setError(message)
-    const destination = (location.state as { from?: string } | null)?.from ?? '/admin'
-    navigate(destination, { replace: true })
+    setSubmitting(true)
+    try {
+      const message = await login(email, password)
+      if (message) return setError(message)
+      const destination = (location.state as { from?: string } | null)?.from ?? '/admin'
+      navigate(destination, { replace: true })
+    } finally {
+      setSubmitting(false)
+    }
   }
 
   return (
@@ -28,7 +34,7 @@ export default function Login() {
         </Link>
         <div className="mt-10">
           <span className="flex h-10 w-10 items-center justify-center border border-[#af915f]/40 text-[#af915f]"><LockKeyhole className="h-4 w-4" /></span>
-          <p className="font-mono2 mt-5 text-[10px] tracking-[0.3em] text-[#af915f] uppercase">Administrator access</p>
+          <p className="font-mono2 mt-5 text-[10px] tracking-[0.3em] text-[#af915f] uppercase">Airport pilot access</p>
           <h1 className="font-display mt-2 text-4xl tracking-wide">Sign in</h1>
           <p className="mt-3 text-sm leading-relaxed text-slate-400">Use an authorised operations account to access the airport dashboard.</p>
         </div>
@@ -40,12 +46,12 @@ export default function Login() {
           </div>
           <div>
             <label htmlFor="password" className="font-mono2 text-[11px] tracking-[0.18em] text-slate-300 uppercase">Password</label>
-            <input id="password" type="password" autoComplete="current-password" required minLength={8} value={password} onChange={(event) => setPassword(event.target.value)} className="mt-2 h-11 w-full border border-white/15 bg-[#0a121c] px-3 text-sm outline-none focus:border-[#af915f]" />
+            <input id="password" type="password" autoComplete="current-password" required minLength={12} value={password} onChange={(event) => setPassword(event.target.value)} className="mt-2 h-11 w-full border border-white/15 bg-[#0a121c] px-3 text-sm outline-none focus:border-[#af915f]" />
           </div>
           {error && <p role="alert" className="text-sm text-red-300">{error}</p>}
-          <button type="submit" className="font-mono2 flex h-11 w-full items-center justify-center bg-[#af915f] text-[11px] font-bold tracking-[0.2em] text-[#0a121c] uppercase hover:bg-[#c8ab74]">Enter dashboard</button>
+          <button type="submit" disabled={submitting} className="font-mono2 flex h-11 w-full items-center justify-center bg-[#af915f] text-[11px] font-bold tracking-[0.2em] text-[#0a121c] uppercase hover:bg-[#c8ab74] disabled:opacity-60">{submitting ? 'Checking account…' : 'Enter dashboard'}</button>
         </form>
-        <p className="mt-6 border-t border-white/10 pt-5 text-xs leading-relaxed text-slate-500">Prototype login only. This browser session is not production authentication.</p>
+        <p className="mt-6 border-t border-white/10 pt-5 text-xs leading-relaxed text-slate-500">Internal pilot account required. Accounts are provisioned out of band; there is no public sign-up.</p>
       </section>
     </main>
   )

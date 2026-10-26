@@ -5,17 +5,19 @@ import { flightToMove, planResolutions, suggestGate, type GateConflict } from '@
 import { Panel } from './Panel'
 import { OpsStatus } from './OpsStatus'
 import { toneStyle } from './tone'
+import type { GateMoveRequest } from '@/state/admin-flights-context'
+import { useAdminLanguage } from '@/state/use-admin-language'
 
 interface Props {
   flights: Flight[]
   conflicts: GateConflict[]
-  onReassign: (id: string, gate: string) => string | null
+  onReassign: (id: string, gate: string) => Promise<string | null>
+  onReassignMany: (moves: GateMoveRequest[]) => Promise<string | null>
   onReview: (f: Flight) => void
 }
 
-const label = (f: Flight) => `${f.no} ${f.kind === 'departure' ? '→' : '←'} ${f.city}`
-
-export function ConflictCenter({ flights, conflicts, onReassign, onReview }: Props) {
+export function ConflictCenter({ flights, conflicts, onReassign, onReassignMany, onReview }: Props) {
+  const { t } = useAdminLanguage()
   const [message, setMessage] = useState<string | null>(null)
 
   // Suggestions are derived from the live board, so they update the moment anything changes.
@@ -29,32 +31,37 @@ export function ConflictCenter({ flights, conflicts, onReassign, onReview }: Pro
   )
   const plan = useMemo(() => planResolutions(flights), [flights])
 
-  const move = (id: string, gate: string) => setMessage(onReassign(id, gate))
+  const move = async (id: string, gate: string) => setMessage(await onReassign(id, gate))
 
-  const resolveAll = () => {
-    const failed = plan.moves.map((m) => onReassign(m.flight.id, m.to)).find((e) => e !== null) ?? null
-    setMessage(failed ?? (plan.unresolved.length ? `${plan.unresolved.length} conflict(s) have no free gate — adjust times or delay a flight.` : null))
+  const resolveAll = async () => {
+    const finalMoves = new Map(plan.moves.map((move) => [move.flight.id, move]))
+    const failed = await onReassignMany([...finalMoves.values()].map((move) => ({
+      id: move.flight.id,
+      version: move.flight.version ?? 1,
+      gate: move.to,
+    })))
+    setMessage(failed ?? (plan.unresolved.length ? t.conflicts.noFreeGatePlan(plan.unresolved.length) : null))
   }
 
   const tone = conflicts.length ? 'var(--ops-bad)' : 'var(--ops-ok)'
 
   return (
-    <Panel eyebrow="Conflict center / 00" title="Gate conflicts" right={<span className="ops-count" style={{ color: tone }}>[{conflicts.length}]</span>}>
+    <Panel eyebrow={t.conflicts.eyebrow} title={t.conflicts.title} right={<span className="ops-count" style={{ color: tone }}>[{conflicts.length}]</span>}>
       <div className="px-4 pb-3">
         {conflicts.length === 0 ? (
           <div className="ops-callout" style={toneStyle('var(--ops-ok)')}>
-            <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> No gate conflicts detected</span>
+            <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4" /> {t.conflicts.noConflicts}</span>
           </div>
         ) : (
           <div className="ops-callout" style={toneStyle('var(--ops-bad)')}>
-            <span className="font-bold">{conflicts.length} · Needs action</span>
+            <span className="font-bold">{conflicts.length} · {t.conflicts.needsAction}</span>
             {plan.moves.length > 0 && (
-              <button type="button" onClick={resolveAll}><Zap className="h-3.5 w-3.5" /> Auto-resolve {plan.moves.length}</button>
+              <button type="button" onClick={resolveAll}><Zap className="h-3.5 w-3.5" /> {t.conflicts.autoResolve(plan.moves.length)}</button>
             )}
           </div>
         )}
         {message && <p role="alert" className="mt-2 text-[var(--ops-warn)]">{message}</p>}
-        <p className="ops-sub mt-2">Two active flights on one gate within 30 minutes, or a gate outside the wing's range.</p>
+        <p className="ops-sub mt-2">{t.conflicts.draftRule}</p>
       </div>
 
       {rows.length > 0 && (
@@ -64,11 +71,11 @@ export function ConflictCenter({ flights, conflicts, onReassign, onReview }: Pro
               <div className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
                   <p className="ops-flightno">
-                    {c.kind === 'clash' ? `Gate ${c.gate} double-booked` : `Invalid gate “${c.gate}”`}
+                    {c.kind === 'clash' ? t.conflicts.doubleBooked(c.gate) : t.conflicts.invalidGate(c.gate)}
                   </p>
                   {c.flights.map((f) => (
                     <p key={f.id} className="ops-sub mt-0.5 flex flex-wrap items-center gap-x-2">
-                      <button type="button" className="text-left hover:text-[var(--ops-accent)]" onClick={() => onReview(f)}>{label(f)}</button>
+                      <button type="button" className="text-left hover:text-[var(--ops-accent)]" onClick={() => onReview(f)}>{f.no} {f.kind === 'departure' ? '→' : '←'} {f.city}</button>
                       <span className="tabular-nums">{f.est}</span>
                       <OpsStatus status={f.status} />
                     </p>
@@ -79,12 +86,12 @@ export function ConflictCenter({ flights, conflicts, onReassign, onReview }: Pro
               <div className="flex gap-2">
                 {suggestion ? (
                   <button type="button" className="ops-btn ops-btn-sm ops-btn-primary flex-1" onClick={() => move(mover.id, suggestion)}>
-                    Move {mover.no} <ArrowRight className="h-3 w-3" /> {suggestion}
+                    {t.conflicts.moveFlight(mover.no, suggestion)} <ArrowRight className="h-3 w-3" />
                   </button>
                 ) : (
-                  <p className="ops-sub flex-1 self-center">No free {mover.wing === 'D' ? 'domestic' : 'international'} gate — delay a flight or change its time.</p>
+                  <p className="ops-sub flex-1 self-center">{t.conflicts.noFreeGate(mover.wing === 'D' ? t.common.domestic.toLowerCase() : t.common.international.toLowerCase())}</p>
                 )}
-                <button type="button" className="ops-btn ops-btn-sm" onClick={() => onReview(mover)}>Review</button>
+                <button type="button" className="ops-btn ops-btn-sm" onClick={() => onReview(mover)}>{t.conflicts.reviewFlight}</button>
               </div>
             </li>
           ))}

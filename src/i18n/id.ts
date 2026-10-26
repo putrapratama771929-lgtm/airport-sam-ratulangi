@@ -314,6 +314,108 @@ export const id: Translations = {
     copyright: '© 2026 Bandar Udara Internasional Sam Ratulangi — prototipe desain',
   },
 
+  admin: {
+    language: { label: 'Bahasa dashboard', english: 'Inggris', indonesian: 'Indonesia', switchToEnglish: 'Ganti bahasa dashboard ke Inggris', switchToIndonesian: 'Ganti bahasa dashboard ke Indonesia' },
+    shell: {
+      brandTitle: 'Bandara Sam Ratulangi', brandSubtitle: 'Operasional aerodrome · MDC', pilot: 'Pilot internal', pilotTooltip: 'Pilot operasional bandara internal dengan input penerbangan manual',
+      clockLabel: 'Waktu bandara saat ini', timeZone: 'WITA', themeToLight: 'Ganti ke tema terang', themeToDark: 'Ganti ke tema gelap',
+      eventLog: (unread) => `Log kejadian${unread ? `, ${unread} belum dibaca` : ''}`, openEventLog: 'Buka log kejadian', signOut: (email) => `Keluar${email ? ` ${email}` : ''}`,
+      sessionChecking: 'Memeriksa sesi pilot…',
+    },
+    navigation: {
+      label: 'Bagian admin', overview: 'Ringkasan', monitor: 'Monitor penerbangan', eventLog: 'Log kejadian',
+      conflictCount: (count) => `${count} konflik`, unreadCount: (count) => `${count} pemberitahuan belum dibaca`,
+      footerDuty: 'Petugas piket · WITA', manualPilot: 'PILOT INTERNAL · DATA DEMO SINTETIS',
+    },
+    operationalAlerts: {
+      label: 'Status operasional', attention: 'Perlu perhatian', scheduleUpdates: 'Pembaruan jadwal', noAlerts: 'Tidak ada peringatan operasional aktif', syntheticScope: 'Pilot internal · data sintetis',
+      conflictCount: (count) => `${count} konflik gate aktif`,
+      delayCount: (count) => `${count} pemberitahuan keterlambatan prioritas tinggi terbaru`,
+      gateChangeCount: (count) => `${count} pemberitahuan perubahan gate terbaru`,
+      viewMonitor: 'Buka pemantauan penerbangan', viewEventLog: 'Buka log aktivitas',
+    },
+    summaryMetrics: {
+      heading: 'Ringkasan metrik', scope: 'Seluruh bandara · data sintetis pilot internal', activeFlights: 'Penerbangan aktif', delayedFlights: 'Penerbangan terlambat',
+      onTimeEstimate: 'Kinerja tepat waktu · estimasi pilot', gateUtilization: 'Penggunaan gate',
+      trackedFlights: (tracked) => `${tracked} terpantau · pembatalan dikecualikan`,
+      delayedOfTracked: (delayed, tracked) => `${delayed} dari ${tracked} penerbangan terpantau`,
+      estimateBasis: (onTime, tracked) => `${onTime} tidak berstatus terlambat / ${tracked} terpantau · pembatalan dikecualikan`,
+      gateOccupancy: (used, total) => `${used} dari ${total} gate terisi`,
+    },
+    page: {
+      overviewEyebrow: 'Operasional / Terminal', overviewTitle: 'Operasional bandara', overviewDescription: 'Status giliran, pengecualian aktif, dan ringkasan pergerakan.',
+      monitorEyebrow: 'Operasional / Penerbangan', monitorTitle: 'Monitor penerbangan', monitorDescription: 'Cari dan perbarui penerbangan terjadwal, kedatangan, dan keberangkatan.',
+      eventEyebrow: 'Operasional / Aktivitas', eventTitle: 'Log kejadian', eventDescription: 'Pemberitahuan operasional dan pembaruan status penerbangan terbaru. Status belum dibaca dibagikan untuk meja pilot ini.',
+      dutyOfficer: 'Petugas piket', loading: 'Memuat data operasional pilot…', retry: 'Coba lagi', filterWing: 'Filter sayap bandara', allWings: 'Semua sayap',
+      domesticWing: 'Sayap domestik', internationalWing: 'Sayap internasional', dateLabel: 'Tanggal operasional dalam WITA',
+      broadcastNotice: 'Kirim pemberitahuan', addFlight: 'Tambah penerbangan', coreVitals: 'Metrik inti', metricsPending: 'Definisi metrik menunggu persetujuan operasional',
+      pilotDateSummary: (date) => `Pilot internal · data demo sintetis · ${date} · WITA`, highAlerts: (count) => `${count} prioritas tinggi`, operationsNotices: 'Pemberitahuan operasional', alertEyebrow: 'Pemberitahuan / Internal', viewEventLog: 'Lihat log kejadian',
+    },
+    common: {
+      all: 'Semua', cancel: 'Batal', keep: 'Pertahankan', confirm: 'Konfirmasi', review: 'Tinjau', edit: 'Ubah', save: 'Simpan',
+      searchFlights: 'Cari penerbangan', searchFlightRouteGate: 'Cari nomor, rute, atau gate', noFlightsMatch: 'Tidak ada penerbangan yang cocok dengan filter aktif.',
+      departure: 'Keberangkatan', arrival: 'Kedatangan', domestic: 'Domestik', international: 'Internasional', gate: 'Gate', gateConflict: 'Konflik gate', route: 'Rute', status: 'Status', estimate: 'Perkiraan',
+      notAvailable: '—', flights: 'penerbangan', completed: 'Selesai',
+    },
+    status: { SCHEDULED: 'Terjadwal', 'CHECK-IN': 'Check-in', BOARDING: 'Boarding', 'FINAL CALL': 'Panggilan terakhir', DEPARTED: 'Berangkat', LANDED: 'Mendarat', DELAYED: 'Tertunda', CANCELLED: 'Dibatalkan' },
+    severity: { high: 'TINGGI', med: 'SEDANG', info: 'INFO' },
+    actions: {
+      openCheckIn: 'Buka check-in', startBoarding: 'Mulai boarding', finalCall: 'Panggilan terakhir', markDeparted: 'Tandai berangkat', markLanded: 'Tandai mendarat', advance: 'Lanjutkan', completed: 'Selesai',
+      delay: (flight, minutes) => `Tunda ${flight} selama ${minutes} menit`,
+    },
+    vitals: {
+      labels: { completion: 'Penerbangan selesai', delayRate: 'Tingkat keterlambatan', boarding: 'Sedang boarding', gateUtilisation: 'Penggunaan gate', activeFlights: 'Penerbangan aktif' },
+      units: { completedTracked: 'Berangkat atau mendarat / tercatat', delayedTracked: 'Tertunda / penerbangan tercatat', boardingActive: 'Boarding atau panggilan terakhir / aktif', gatesUsedTotal: 'Gate digunakan / total gate', activeTracked: 'Berjalan / tercatat' },
+    },
+    queue: {
+      eyebrow: 'Antrean tindakan / 01', title: 'Penerbangan prioritas', subtitle: 'Dahulukan yang tertunda. Lanjutkan status untuk menuntaskan alur.', delayed: 'Tertunda', noDelayed: 'Tidak ada penerbangan tertunda', delayedOnly: 'Hanya yang tertunda', showAll: 'Tampilkan semua',
+      attention: (count) => `Perlu perhatian (${count})`, allActive: (count) => `Semua aktif (${count})`, flightRoute: 'Penerbangan / rute', gateEstimateStatus: 'Gate · Perkiraan · Status', to: 'Ke', from: 'Dari', gateConflictTitle: 'Konflik gate',
+      noFlightsMatchView: 'Tidak ada penerbangan yang cocok dengan tampilan ini.', confirmCancel: (flight) => `Konfirmasi pembatalan ${flight}`, delayFlight: (flight, minutes) => `Tunda ${flight} selama ${minutes} menit`,
+    },
+    conflicts: {
+      eyebrow: 'Pusat konflik / 00', title: 'Konflik gate', noConflicts: 'Tidak ada konflik gate yang terdeteksi', needsAction: 'Perlu tindakan', autoResolve: (count) => `Atasi otomatis ${count}`,
+      noFreeGate: (wing) => `Tidak ada gate ${wing} yang kosong — tunda penerbangan atau ubah waktunya.`, noFreeGatePlan: (count) => `${count} konflik tidak memiliki gate kosong — sesuaikan waktu atau tunda penerbangan.`,
+      draftRule: 'Aturan pilot masih berupa draf dan menunggu persetujuan operasional: gate sama dalam rentang 30 menit atau gate di luar rentang sayap.',
+      doubleBooked: (gate) => `Gate ${gate} digunakan bersamaan`, invalidGate: (gate) => `Gate ${gate} tidak valid`, moveFlight: (flight, gate) => `Pindahkan ${flight} ke ${gate}`, reviewFlight: 'Tinjau penerbangan',
+    },
+    gates: {
+      eyebrow: 'Matriks gate / 02', title: 'Status gate', selectGate: 'Pilih gate untuk melihat penerbangannya.', occupied: 'Terisi', boarding: 'Boarding', delayed: 'Tertunda', free: 'Kosong',
+      gates: 'gate', activeFlights: (count) => `${count} aktif`, flightAbbr: 'pnb', noFlightsOnGate: 'Tidak ada penerbangan aktif di gate ini.', gateAccessible: (gate, count) => `Gate ${gate}, ${count} penerbangan aktif`,
+    },
+    traffic: {
+      eyebrow: 'Pergerakan / 04', title: 'Pergerakan per jam', departures: 'Keberangkatan', arrivals: 'Kedatangan', chartLabel: 'Keberangkatan dan kedatangan berdasarkan perkiraan jam',
+      chartDescription: (hour, count, direction) => `Pukul ${hour}:00 — ${count} ${direction}`, groupedByEstimate: 'Dikelompokkan berdasarkan perkiraan waktu (WITA). Kolom sorotan menunjukkan jam saat ini.',
+    },
+    statusMix: { eyebrow: 'Komposisi status / 05', title: 'Penerbangan menurut status', chartLabel: (count) => `${count} penerbangan menurut status`, empty: 'Tidak ada penerbangan pada tampilan ini.' },
+    airlines: { eyebrow: 'Maskapai / 03', title: 'Lalu lintas per maskapai', rightLabel: 'Penerbangan · porsi keterlambatan', empty: 'Tidak ada penerbangan pada tampilan ini.' },
+    notices: {
+      empty: 'Belum ada pemberitahuan.', severityLabel: 'Tingkat prioritas pemberitahuan',
+      system: {
+        flightAdded: (flight, direction, city) => `Operasional menambahkan penerbangan ${flight} ${direction} ${city}.`,
+        delayed: (flight, direction, city, minutes) => `Penerbangan ${flight} ${direction} ${city} terlambat ${minutes} menit.`,
+        cancelled: (flight, direction, city) => `Penerbangan ${flight} ${direction} ${city} dibatalkan. Silakan hubungi maskapai.`,
+        gateChanged: (flight, gate) => `Perubahan gate: penerbangan ${flight} kini menggunakan Gate ${gate}.`,
+        statusUpdated: (flight, status) => `Operasional memperbarui ${flight}: ${status.toLowerCase()}.`,
+      },
+    },
+    eventLog: {
+      eyebrow: 'Log kejadian / 03', title: 'Pemberitahuan terbaru', highRecent: (total, high) => `${total} · ${high} prioritas tinggi · kejadian terbaru`, filterLabel: 'Filter pemberitahuan', all: 'Semua', delays: 'Keterlambatan', gateChanges: 'Perubahan gate', boarding: 'Boarding', info: 'Info', emptyType: 'Tidak ada pemberitahuan dengan jenis ini.',
+    },
+    monitor: {
+      eyebrow: 'Manajemen penerbangan / 02', title: 'Monitor penerbangan', flightType: 'Jenis penerbangan', allFlights: 'Semua penerbangan', departures: 'Keberangkatan', arrivals: 'Kedatangan',
+      sortBy: 'Urutkan penerbangan berdasarkan', sortEstimate: 'Perkiraan waktu', sortFlight: 'Nomor penerbangan', sortAirline: 'Maskapai', sortRoute: 'Rute', sortGate: 'Gate', sortStatus: 'Status', sortAscending: 'Urutkan naik', sortDescending: 'Urutkan turun',
+      searchPlaceholder: 'Cari nomor, rute, atau gate', tableFlight: 'Penerbangan', tableRoute: 'Rute', tableGate: 'Gate', tableEstimate: 'Perkiraan', tableStatus: 'Status', nextStep: 'Tindakan berikutnya',
+      gateFor: (flight) => `Gate untuk ${flight}`, estimateFor: (flight) => `Perkiraan waktu ${flight}`, statusFor: (flight) => `Status ${flight}`, invalidGate: 'Gate tidak sesuai dengan sayap ini.', gateConflict: 'Konflik gate: penerbangan aktif lain menggunakan gate ini dalam rentang 30 menit.', schedule: (time) => `jadwal ${time}`,
+      showing: (start, end, total) => `Menampilkan ${start}–${end} dari ${total} penerbangan yang dimuat`, noMatches: 'Tidak ada penerbangan yang cocok dengan filter aktif.', previous: 'Sebelumnya', next: 'Berikutnya',
+    },
+    dialogs: {
+      eyebrow: 'Tindakan operasional', close: 'Tutup dialog', addTitle: 'Tambah penerbangan', editTitle: (flight) => 'Ubah ' + flight, noticeTitle: 'Kirim pemberitahuan', flightNumber: 'Nomor penerbangan', airline: 'Maskapai', destination: 'Tujuan', origin: 'Asal', flightType: 'Jenis penerbangan', wing: 'Sayap', gate: 'Gate', operatingDate: 'Tanggal operasional (WITA)', scheduledWita: 'Jadwal (WITA)', estimatedWita: 'Perkiraan (WITA)', status: 'Status', noticeLabel: 'Pemberitahuan operasional internal', noticePlaceholder: 'Tulis pemberitahuan operasional internal…', noticeInfo: 'Disimpan di Log kejadian internal. Pilot ini tidak menerbitkan pemberitahuan ke situs publik.', gateExample: 'mis. D1 atau I3', createFlight: 'Buat penerbangan', saveFlight: 'Simpan penerbangan', publishNotice: 'Terbitkan pemberitahuan', saving: 'Menyimpan…', errorFlight: 'Tindakan penerbangan tidak dapat diselesaikan.',
+    },
+    errors: {
+      generic: 'Permintaan tidak dapat diselesaikan.', authRequired: 'Masuk untuk menggunakan operasional bandara.', permissionDenied: 'Akun ini tidak dapat melakukan tindakan operasional bandara.', validation: 'Periksa detail penerbangan, lalu coba lagi.', duplicateRecord: 'Data dengan detail tersebut sudah ada.', duplicateActiveFlight: 'Penerbangan aktif dengan detail tersebut sudah ada di papan.', flightNotFound: 'Penerbangan tidak ditemukan. Muat ulang papan, lalu coba lagi.', versionConflict: 'Data penerbangan berubah. Muat ulang dan periksa nilai terbaru sebelum menyimpan.', flightFinished: 'Penerbangan ini sudah selesai.', rateLimited: 'Terlalu banyak percobaan masuk. Coba lagi nanti.', originRejected: 'Asal permintaan tidak diizinkan.',
+    },
+  },
+
   chatbot: {
     greeting:
       'Halo! Saya Nara, asisten bandara MDC. Tanya saya tentang penerbangan, gate, parkir, transportasi, atau fasilitas.',

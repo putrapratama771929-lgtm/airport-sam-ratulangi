@@ -1,16 +1,17 @@
 import { Bell, LogOut, Moon, Plane, Sun } from 'lucide-react'
 import { Link } from 'react-router'
-import { fmtClock, fmtDate } from '@/data/airport'
+import { fmtClock } from '@/data/airport'
 import { useNow } from '@/hooks/useNow'
 import type { OpsTheme } from '@/hooks/use-ops-theme'
+import { useAdminLanguage } from '@/state/use-admin-language'
 
-/** Own component so the once-per-second clock does not re-render the whole dashboard. */
-function Clock() {
+/** Isolated one-second clock so the rest of the admin shell stays still. */
+function Clock({ locale, timeZone }: { locale: string; timeZone: string }) {
   const now = useNow(1_000)
   return (
-    <div className="text-right leading-tight">
-      <p className="text-[16px] font-bold tabular-nums sm:text-[20px]">{fmtClock(now)}</p>
-      <p className="mt-1 hidden text-[10px] tracking-[0.12em] text-[var(--ops-muted)] uppercase sm:block">{fmtDate(now)} · WITA</p>
+    <div className="ops-clock" aria-label={`${timeZone} ${new Intl.DateTimeFormat(locale, { timeZone: 'Asia/Makassar', dateStyle: 'full' }).format(now)}`}>
+      <p className="ops-clock-value">{fmtClock(now)}</p>
+      <p className="ops-clock-date">{new Intl.DateTimeFormat(locale, { timeZone: 'Asia/Makassar', weekday: 'short', day: '2-digit', month: 'short', year: 'numeric' }).format(now)} · {timeZone}</p>
     </div>
   )
 }
@@ -25,40 +26,41 @@ interface TopBarProps {
 }
 
 export function TopBar({ email, unread, theme, onToggleTheme, onBell, onSignOut }: TopBarProps) {
+  const { lang, setLang, t } = useAdminLanguage()
+  const locale = lang === 'id' ? 'id-ID' : 'en-GB'
   return (
-    <div className="ops-topbar">
-      <div className="flex min-w-0 items-center gap-5">
-        <Link to="/" className="flex items-baseline gap-3" aria-label="Back to public site">
-          <span className="ops-logo">
-            MDC <span className="ops-sq" /> OPS
-          </span>
-          <span className="hidden text-[11px] tracking-[0.28em] text-[var(--ops-muted)] uppercase md:inline">Airport operations</span>
-        </Link>
-        <span className="hidden h-6 w-px bg-[var(--ops-line)] lg:block" />
-        <span className="hidden items-center gap-2 text-[11px] text-[var(--ops-muted)] lg:flex">
-          <Plane className="h-3.5 w-3.5" /> Sam Ratulangi Intl
+    <header className="ops-topbar">
+      <Link to="/" className="ops-brand" aria-label={t.shell.brandTitle}>
+        <span className="ops-brand-mark"><Plane className="h-5 w-5" aria-hidden="true" /></span>
+        <span className="min-w-0">
+          <span className="ops-brand-title">{t.shell.brandTitle}</span>
+          <span className="ops-brand-subtitle">{t.shell.brandSubtitle}</span>
         </span>
+      </Link>
+
+      <div className="ops-header-state" title={t.shell.pilotTooltip}>
+        <span className="ops-pilot-dot" />
+        {t.shell.pilot}
       </div>
 
-      <div className="flex items-center gap-2 sm:gap-4">
-        <span className="hidden text-[11px] text-[var(--ops-muted)] xl:inline">
-          STATUS: <span className="ops-sq mx-1" /> <span className="text-[var(--ops-text)]">Demo workspace</span>
-        </span>
-        <span className="ops-pill-live hidden sm:inline-flex">
-          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-current" /> Feed connected
-        </span>
-        <Clock />
-        <button type="button" className="ops-btn ops-btn-icon" onClick={onToggleTheme} aria-label={theme === 'dark' ? 'Switch to light theme' : 'Switch to dark theme'}>
+      <div className="ops-header-actions">
+        <Clock locale={locale} timeZone={t.shell.timeZone} />
+        {email && <span className="ops-user" title={email}>{email}</span>}
+        <div className="ops-language-toggle flex items-center gap-1" role="group" aria-label={t.language.label}>
+          <button type="button" className="ops-chip" aria-label={t.language.english} aria-pressed={lang === 'en'} onClick={() => setLang('en')}>EN</button>
+          <button type="button" className="ops-chip" aria-label={t.language.indonesian} aria-pressed={lang === 'id'} onClick={() => setLang('id')}>ID</button>
+        </div>
+        <button type="button" className="ops-btn ops-btn-icon" onClick={onToggleTheme} aria-label={theme === 'dark' ? t.shell.themeToLight : t.shell.themeToDark} title={theme === 'dark' ? t.shell.themeToLight : t.shell.themeToDark}>
           {theme === 'dark' ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
         </button>
-        <button type="button" className="ops-btn ops-btn-icon" onClick={onBell} aria-label={unread ? `Event log, ${unread} unread` : 'Event log'}>
+        <button type="button" className="ops-btn ops-btn-icon" onClick={onBell} aria-label={t.shell.eventLog(unread)} title={t.shell.openEventLog}>
           <Bell className="h-4 w-4" />
           {unread > 0 && <span className="ops-badge">{unread > 9 ? '9+' : unread}</span>}
         </button>
-        <button type="button" className="ops-btn ops-btn-icon" onClick={onSignOut} aria-label={`Sign out${email ? ` ${email}` : ''}`} title={email}>
+        <button type="button" className="ops-btn ops-btn-icon" onClick={onSignOut} aria-label={t.shell.signOut(email)} title={t.shell.signOut()}>
           <LogOut className="h-4 w-4" />
         </button>
       </div>
-    </div>
+    </header>
   )
 }

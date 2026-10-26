@@ -11,6 +11,10 @@ export type FlightStatus =
 
 export interface Flight {
   id: string
+  version?: number
+  createdAt?: string
+  updatedAt?: string
+  serviceDate?: string
   no: string
   airline: string
   city: string // origin/destination city
@@ -27,6 +31,8 @@ export interface Notif {
   time: string
   msg: string
   type: 'info' | 'delay' | 'gate' | 'boarding'
+  messageCode?: 'flight.added' | 'flight.delayed' | 'flight.cancelled' | 'flight.gate_changed' | 'flight.status_updated'
+  messageParams?: Record<string, string | number>
 }
 
 // ---- Airlines & routes (Sam Ratulangi Intl — MDC, Manado) ----

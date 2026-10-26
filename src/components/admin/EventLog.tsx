@@ -3,32 +3,33 @@ import type { Notif } from '@/data/airport'
 import { noticeSeverity } from '@/lib/ops-stats'
 import { Panel } from './Panel'
 import { NoticeList } from './NoticeList'
+import { useAdminLanguage } from '@/state/use-admin-language'
 
 type Filter = 'all' | Notif['type']
-const FILTERS: Array<{ id: Filter; label: string }> = [
-  { id: 'all', label: 'All' },
-  { id: 'delay', label: 'Delays' },
-  { id: 'gate', label: 'Gate changes' },
-  { id: 'boarding', label: 'Boarding' },
-  { id: 'info', label: 'Info' },
-]
-
 export function EventLog({ notifs }: { notifs: Notif[] }) {
+  const { t } = useAdminLanguage()
   const [filter, setFilter] = useState<Filter>('all')
   const items = filter === 'all' ? notifs : notifs.filter((n) => n.type === filter)
   const high = notifs.filter((n) => noticeSeverity(n.type) === 'high').length
+  const filters: Array<{ id: Filter; label: string }> = [
+    { id: 'all', label: t.eventLog.all },
+    { id: 'delay', label: t.eventLog.delays },
+    { id: 'gate', label: t.eventLog.gateChanges },
+    { id: 'boarding', label: t.eventLog.boarding },
+    { id: 'info', label: t.eventLog.info },
+  ]
 
   return (
-    <Panel eyebrow="Event log / 03" title="Latest notices" right={<span className="ops-count">[{notifs.length}] · {high} high · latest 30 kept</span>}>
+    <Panel eyebrow={t.eventLog.eyebrow} title={t.eventLog.title} right={<span className="ops-count">{t.eventLog.highRecent(notifs.length, high)}</span>}>
       <div className="ops-body">
-        <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label="Filter notices">
-          {FILTERS.map((f) => (
+        <div className="mb-4 flex flex-wrap gap-2" role="group" aria-label={t.eventLog.filterLabel}>
+          {filters.map((f) => (
             <button key={f.id} type="button" className="ops-chip" aria-pressed={filter === f.id} onClick={() => setFilter(f.id)}>
               {f.label}
             </button>
           ))}
         </div>
-        <NoticeList notifs={items} emptyText="No notices of this type." />
+        <NoticeList notifs={items} emptyText={t.eventLog.emptyType} />
       </div>
     </Panel>
   )

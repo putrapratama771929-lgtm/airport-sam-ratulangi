@@ -11,10 +11,10 @@ export const STATUS_COLOR: Record<FlightStatus, string> = {
   SCHEDULED: 'var(--ops-muted)',
   'CHECK-IN': 'var(--ops-cyan)',
   BOARDING: 'var(--ops-ok)',
-  'FINAL CALL': 'var(--ops-accent)',
+  'FINAL CALL': 'var(--ops-cyan)',
   DELAYED: 'var(--ops-warn)',
-  DEPARTED: 'var(--ops-faint)',
-  LANDED: 'var(--ops-faint)',
+  DEPARTED: 'var(--ops-ok)',
+  LANDED: 'var(--ops-ok)',
   CANCELLED: 'var(--ops-bad)',
 }
 

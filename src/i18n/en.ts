@@ -266,6 +266,108 @@ export const en: Translations = {
     copyright: '© 2026 Sam Ratulangi International Airport — design prototype',
   },
 
+  admin: {
+    language: { label: 'Dashboard language', english: 'English', indonesian: 'Indonesian', switchToEnglish: 'Switch dashboard language to English', switchToIndonesian: 'Switch dashboard language to Indonesian' },
+    shell: {
+      brandTitle: 'Sam Ratulangi Airport', brandSubtitle: 'Aerodrome operations · MDC', pilot: 'Internal pilot', pilotTooltip: 'Internal airport operations pilot with manual flight entry',
+      clockLabel: 'Current airport time', timeZone: 'WITA', themeToLight: 'Switch to light theme', themeToDark: 'Switch to dark theme',
+      eventLog: (unread) => `Event log${unread ? `, ${unread} unread` : ''}`, openEventLog: 'Open event log', signOut: (email) => `Sign out${email ? ` ${email}` : ''}`,
+      sessionChecking: 'Checking pilot session…',
+    },
+    navigation: {
+      label: 'Admin sections', overview: 'Overview', monitor: 'Flight monitor', eventLog: 'Event log',
+      conflictCount: (count) => `${count} ${count === 1 ? 'conflict' : 'conflicts'}`, unreadCount: (count) => `${count} unread ${count === 1 ? 'notice' : 'notices'}`,
+      footerDuty: 'Duty officer · WITA', manualPilot: 'INTERNAL PILOT · SYNTHETIC DEMO DATA',
+    },
+    operationalAlerts: {
+      label: 'Operational status', attention: 'Attention required', scheduleUpdates: 'Schedule updates', noAlerts: 'No active operational alerts', syntheticScope: 'Internal pilot · synthetic data',
+      conflictCount: (count) => `${count} active gate conflict${count === 1 ? '' : 's'}`,
+      delayCount: (count) => `${count} recent high-severity delay notice${count === 1 ? '' : 's'}`,
+      gateChangeCount: (count) => `${count} recent gate-change notice${count === 1 ? '' : 's'}`,
+      viewMonitor: 'Open flight monitor', viewEventLog: 'Open event log',
+    },
+    summaryMetrics: {
+      heading: 'At-a-glance metrics', scope: 'Airport-wide · synthetic pilot data', activeFlights: 'Active flights', delayedFlights: 'Delayed flights',
+      onTimeEstimate: 'On-time performance · pilot estimate', gateUtilization: 'Gate utilization',
+      trackedFlights: (tracked) => `${tracked} tracked · cancellations excluded`,
+      delayedOfTracked: (delayed, tracked) => `${delayed} of ${tracked} tracked flights`,
+      estimateBasis: (onTime, tracked) => `${onTime} not delayed / ${tracked} tracked · cancellations excluded`,
+      gateOccupancy: (used, total) => `${used} of ${total} gates occupied`,
+    },
+    page: {
+      overviewEyebrow: 'Operations / Terminal', overviewTitle: 'Airport operations', overviewDescription: 'Shift status, active exceptions, and movement overview.',
+      monitorEyebrow: 'Operations / Flights', monitorTitle: 'Flight monitor', monitorDescription: 'Search and update scheduled, arriving, and departing flights.',
+      eventEyebrow: 'Operations / Activity', eventTitle: 'Event log', eventDescription: 'Recent operational notices and flight status updates. Unread state is shared across this pilot desk.',
+      dutyOfficer: 'Duty officer', loading: 'Loading pilot operations data…', retry: 'Retry', filterWing: 'Filter by airport wing', allWings: 'All wings',
+      domesticWing: 'Domestic wing', internationalWing: 'International wing', dateLabel: 'Operating date in WITA',
+      broadcastNotice: 'Broadcast notice', addFlight: 'Add flight', coreVitals: 'Core vitals', metricsPending: 'Draft metrics pending operations sign-off',
+      pilotDateSummary: (date) => `Internal pilot · synthetic demo data · ${date} · WITA`, highAlerts: (count) => `${count} high`, operationsNotices: 'Operations notices', alertEyebrow: 'Alerts / Internal', viewEventLog: 'View event log',
+    },
+    common: {
+      all: 'All', cancel: 'Cancel', keep: 'Keep', confirm: 'Confirm', review: 'Review', edit: 'Edit', save: 'Save',
+      searchFlights: 'Search flights', searchFlightRouteGate: 'Search flight, route or gate', noFlightsMatch: 'No flights match the active filter.',
+      departure: 'Departure', arrival: 'Arrival', domestic: 'Domestic', international: 'International', gate: 'Gate', gateConflict: 'Gate conflict', route: 'Route', status: 'Status', estimate: 'Estimate',
+      notAvailable: '—', flights: 'flights', completed: 'Completed',
+    },
+    status: { SCHEDULED: 'Scheduled', 'CHECK-IN': 'Check-in', BOARDING: 'Boarding', 'FINAL CALL': 'Final call', DEPARTED: 'Departed', LANDED: 'Landed', DELAYED: 'Delayed', CANCELLED: 'Cancelled' },
+    severity: { high: 'HIGH', med: 'MED', info: 'INFO' },
+    actions: {
+      openCheckIn: 'Open check-in', startBoarding: 'Start boarding', finalCall: 'Final call', markDeparted: 'Mark departed', markLanded: 'Mark landed', advance: 'Advance', completed: 'Completed',
+      delay: (flight, minutes) => `Delay ${flight} by ${minutes} minutes`,
+    },
+    vitals: {
+      labels: { completion: 'Flight completion', delayRate: 'Delay rate', boarding: 'Now boarding', gateUtilisation: 'Gate utilisation', activeFlights: 'Active flights' },
+      units: { completedTracked: 'Departed or landed / tracked', delayedTracked: 'Delayed / tracked flights', boardingActive: 'Boarding or final call / active', gatesUsedTotal: 'Gates in use / total gates', activeTracked: 'In progress / tracked' },
+    },
+    queue: {
+      eyebrow: 'Action queue / 01', title: 'Priority flights', subtitle: 'Delayed first. Advance a flight to close the loop.', delayed: 'Delayed', noDelayed: 'No delayed flights', delayedOnly: 'Delayed only', showAll: 'Show all',
+      attention: (count) => `Attention (${count})`, allActive: (count) => `All active (${count})`, flightRoute: 'Flight / route', gateEstimateStatus: 'Gate · Est · Status', to: 'To', from: 'From', gateConflictTitle: 'Gate conflict',
+      noFlightsMatchView: 'No flights match this view.', confirmCancel: (flight) => `Confirm cancel ${flight}`, delayFlight: (flight, minutes) => `Delay ${flight} by ${minutes} minutes`,
+    },
+    conflicts: {
+      eyebrow: 'Conflict center / 00', title: 'Gate conflicts', noConflicts: 'No gate conflicts detected', needsAction: 'Needs action', autoResolve: (count) => `Auto-resolve ${count}`,
+      noFreeGate: (wing) => `No free ${wing} gate — delay a flight or change its time.`, noFreeGatePlan: (count) => `${count} conflict(s) have no free gate — adjust times or delay a flight.`,
+      draftRule: 'Draft pilot rule pending operations sign-off: shared gate within 30 minutes or gate outside wing range.',
+      doubleBooked: (gate) => `Gate ${gate} double-booked`, invalidGate: (gate) => `Invalid gate “${gate}”`, moveFlight: (flight, gate) => `Move ${flight} to ${gate}`, reviewFlight: 'Review flight',
+    },
+    gates: {
+      eyebrow: 'Gate matrix / 02', title: 'Gate status', selectGate: 'Select a gate to see its flights.', occupied: 'Occupied', boarding: 'Boarding', delayed: 'Delayed', free: 'Free',
+      gates: 'gates', activeFlights: (count) => `${count} active`, flightAbbr: 'flt', noFlightsOnGate: 'No active flights on this gate.', gateAccessible: (gate, count) => `Gate ${gate}, ${count} active ${count === 1 ? 'flight' : 'flights'}`,
+    },
+    traffic: {
+      eyebrow: 'Traffic / 04', title: 'Movements by hour', departures: 'Departures', arrivals: 'Arrivals', chartLabel: 'Departures and arrivals per estimated hour',
+      chartDescription: (hour, count, direction) => `${hour}:00 — ${count} ${direction}`, groupedByEstimate: 'Grouped by estimated time (WITA). Highlighted column is the current hour.',
+    },
+    statusMix: { eyebrow: 'Status mix / 05', title: 'Flights by status', chartLabel: (count) => `${count} flights by status`, empty: 'No flights in this view.' },
+    airlines: { eyebrow: 'Airlines / 03', title: 'Traffic by airline', rightLabel: 'Flights · delay share', empty: 'No flights in this view.' },
+    notices: {
+      empty: 'No notices yet.', severityLabel: 'Notice severity',
+      system: {
+        flightAdded: (flight, direction, city) => `Operations added flight ${flight} ${direction} ${city}.`,
+        delayed: (flight, direction, city, minutes) => `Flight ${flight} ${direction} ${city} is delayed by ${minutes} minutes.`,
+        cancelled: (flight, direction, city) => `Flight ${flight} ${direction} ${city} has been cancelled. Please contact your airline.`,
+        gateChanged: (flight, gate) => `Gate change: flight ${flight} now uses Gate ${gate}.`,
+        statusUpdated: (flight, status) => `Operations updated ${flight}: ${status.toLowerCase()}.`,
+      },
+    },
+    eventLog: {
+      eyebrow: 'Event log / 03', title: 'Latest notices', highRecent: (total, high) => `${total} · ${high} high · recent events`, filterLabel: 'Filter notices', all: 'All', delays: 'Delays', gateChanges: 'Gate changes', boarding: 'Boarding', info: 'Info', emptyType: 'No notices of this type.',
+    },
+    monitor: {
+      eyebrow: 'Flight management / 02', title: 'Flight monitor', flightType: 'Flight type', allFlights: 'All flights', departures: 'Departures', arrivals: 'Arrivals',
+      sortBy: 'Sort flights by', sortEstimate: 'Estimated time', sortFlight: 'Flight number', sortAirline: 'Airline', sortRoute: 'Route', sortGate: 'Gate', sortStatus: 'Status', sortAscending: 'Sort ascending', sortDescending: 'Sort descending',
+      searchPlaceholder: 'Search flight, route, gate', tableFlight: 'Flight', tableRoute: 'Route', tableGate: 'Gate', tableEstimate: 'Estimate', tableStatus: 'Status', nextStep: 'Next step',
+      gateFor: (flight) => `Gate for ${flight}`, estimateFor: (flight) => `Estimated time for ${flight}`, statusFor: (flight) => `Status for ${flight}`, invalidGate: 'Gate is not valid for this wing.', gateConflict: 'Gate conflict: another active flight uses this gate within 30 minutes.', schedule: (time) => `sched. ${time}`,
+      showing: (start, end, total) => `Showing ${start}–${end} of ${total} loaded flights`, noMatches: 'No flights match the active filter.', previous: 'Previous', next: 'Next',
+    },
+    dialogs: {
+      eyebrow: 'Operations action', close: 'Close dialog', addTitle: 'Add a flight', editTitle: (flight) => `Edit ${flight}`, noticeTitle: 'Broadcast notice', flightNumber: 'Flight number', airline: 'Airline', destination: 'Destination', origin: 'Origin', flightType: 'Flight type', wing: 'Wing', gate: 'Gate', operatingDate: 'Operating date (WITA)', scheduledWita: 'Scheduled (WITA)', estimatedWita: 'Estimated (WITA)', status: 'Status', noticeLabel: 'Internal operations notice', noticePlaceholder: 'Enter an internal operations notice…', noticeInfo: 'Stored in the internal Event log. This pilot does not publish notices to the public website.', gateExample: 'e.g. D1 or I3', createFlight: 'Create flight', saveFlight: 'Save flight', publishNotice: 'Publish notice', saving: 'Saving…', errorFlight: 'Could not complete the flight action.',
+    },
+    errors: {
+      generic: 'The request could not be completed.', authRequired: 'Sign in to use airport operations.', permissionDenied: 'This account cannot perform airport operations.', validation: 'Check the flight details and try again.', duplicateRecord: 'A record with those details already exists.', duplicateActiveFlight: 'An active flight with those details is already on the board.', flightNotFound: 'Flight was not found. Refresh the board and try again.', versionConflict: 'This flight changed. Refresh and review the latest values before saving.', flightFinished: 'This flight is already complete.', rateLimited: 'Too many sign-in attempts. Try again later.', originRejected: 'Request origin is not allowed.',
+    },
+  },
+
   chatbot: {
     greeting:
       "Hello! I'm Nara, the MDC airport assistant. Ask me about flights, gates, parking, transport, or facilities.",

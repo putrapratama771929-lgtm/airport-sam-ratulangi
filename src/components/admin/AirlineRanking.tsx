@@ -2,13 +2,15 @@ import { useMemo } from 'react'
 import type { Flight } from '@/data/airport'
 import { airlineRanking } from '@/lib/ops-stats'
 import { Panel } from './Panel'
+import { useAdminLanguage } from '@/state/use-admin-language'
 
 export function AirlineRanking({ flights }: { flights: Flight[] }) {
+  const { t } = useAdminLanguage()
   const rows = useMemo(() => airlineRanking(flights), [flights])
   const max = Math.max(1, ...rows.map((r) => r.count))
 
   return (
-    <Panel eyebrow="Airlines / 03" title="Traffic by airline" right={<span className="ops-sub">Flights · delay share</span>}>
+    <Panel eyebrow={t.airlines.eyebrow} title={t.airlines.title} right={<span className="ops-sub">{t.airlines.rightLabel}</span>}>
       <ol className="ops-body space-y-3">
         {rows.map((r, i) => {
           const share = r.count ? Math.round((r.delayed / r.count) * 100) : 0
@@ -29,7 +31,7 @@ export function AirlineRanking({ flights }: { flights: Flight[] }) {
             </li>
           )
         })}
-        {rows.length === 0 && <li className="py-6 text-center text-[var(--ops-muted)]">No flights in this view.</li>}
+        {rows.length === 0 && <li className="py-6 text-center text-[var(--ops-muted)]">{t.airlines.empty}</li>}
       </ol>
     </Panel>
   )
